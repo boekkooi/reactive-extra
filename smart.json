@@ -1,0 +1,9 @@
+{
+  "name": "reactive-extra",
+  "description": "Providing reactive classes",
+  "homepage": "https://github.com/boekkooi/reactive-extra",
+  "author": "Warnar Boekkooi <warnar@boekkooi.net>",
+  "version": "0.0.1",
+  "git": "https://github.com/boekkooi/reactive-extra.git",
+  "packages": {}
+}
