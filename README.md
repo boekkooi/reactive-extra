@@ -15,7 +15,7 @@ If you don't like using meteorite create the folder `packages/reactive-extra/` a
 
 ## ReactiveObject
 A reactive object implementation.
-Checkout the [api docs](https://boekkooi.github.io/reactive-extra/reactive-object.html)
+Checkout the [api docs](http://boekkooi.github.io/reactive-extra/reactive-object.html)
 
 ### Usage
 
@@ -29,7 +29,7 @@ obj.undefineProperty('foo'); // Don't use 'delete obj.foo' it will give strange 
 
 ## ReactiveDictionary
 A reactive dictionary implementation.
-Checkout the [api docs](https://boekkooi.github.io/reactive-extra/reactive-dictionary.html)
+Checkout the [api docs](http://boekkooi.github.io/reactive-extra/reactive-dictionary.html)
 
 ### Usage
 
@@ -45,7 +45,7 @@ obj.clear();
 
 ## ReactiveArray
 A reactive array implementation.
-Checkout the [api docs](https://boekkooi.github.io/reactive-extra/reactive-array.html).
+Checkout the [api docs](http://boekkooi.github.io/reactive-extra/reactive-array.html).
 
 ### Usage
 
