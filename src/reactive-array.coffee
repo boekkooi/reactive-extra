@@ -23,8 +23,7 @@ class @ReactiveArray
         self._list.length
       set: (length) ->
         self._list.length = length
-        self._createIndexProxies()
-        @_listLengthDep.changed()
+        self._syncIndexProxies()
         return self._list.length
 
     # Assign arguments

@@ -173,8 +173,7 @@
         self._list.length
       set: (length) -&gt;
         self._list.length = length
-        self._createIndexProxies()
-        <span class="property">@_listLengthDep</span>.changed()
+        self._syncIndexProxies()
         <span class="keyword">return</span> self._list.length</pre></div></div>
             
         </li>

@@ -19,8 +19,7 @@
         },
         set: function(length) {
           self._list.length = length;
-          self._createIndexProxies();
-          this._listLengthDep.changed();
+          self._syncIndexProxies();
           return self._list.length;
         }
       });
@@ -29,6 +28,12 @@
         this._syncIndexProxies(true);
       }
     }
+
+    ReactiveArray.prototype.toArray = function() {
+      this._listLengthDep.depend();
+      this._listValueDep.depend();
+      return this._list.slice();
+    };
 
     ReactiveArray.prototype.indexOf = function(searchElement, fromIndex) {
       var i, idx, _base, _i, _ref, _ref1;

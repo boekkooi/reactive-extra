@@ -4,6 +4,19 @@ Tinytest.add "ReactiveArray - Mutator", (test) ->
   test.equal arr.length, 0
   test.equal _.size(arr), 0
 
+  # length assign
+  test.equal arr.length = 8, 8
+  arr[3] = 'abc'
+  test.equal arr.length, 8
+  test.equal _.size(arr), 8
+
+  test.equal arr.length = 4, 4
+  test.equal arr[3], 'abc'
+
+  test.equal arr.length = 0, 0
+  test.equal arr.length, 0
+  test.equal _.size(arr), 0
+
   # push
   test.equal arr.push('drink', 'beer', 'or', 'wine'), 4
   test.equal arr.length, 4
