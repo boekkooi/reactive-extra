@@ -107,7 +107,15 @@
     test.equal(bracketX, 3);
     test.equal(lengthX, 5);
     test.equal(indexOfX, 5, 'sort changes all (not really but i\'m lazy)');
-    return test.equal(lastIndexOfX, 6, 'sort changes all (not really but i\'m lazy)');
+    test.equal(lastIndexOfX, 6, 'sort changes all (not really but i\'m lazy)');
+    arr.unshift('drink');
+    Deps.flush();
+    test.equal(lengthX, 6);
+    test.equal(bracketX, 4);
+    test.equal(arr.shift(), 'drink');
+    Deps.flush();
+    test.equal(lengthX, 7);
+    return test.equal(bracketX, 5);
   });
 
   Tinytest.add("ReactiveArray - Sort/Reverse", function(test) {

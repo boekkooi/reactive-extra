@@ -210,11 +210,20 @@ class @ReactiveArray
 
 # #### *Mutator methods*
 # Create proxy methods
-_.each ['pop', 'push', 'shift', 'splice', 'unshift'], (m) ->
+_.each ['pop', 'push'], (m) ->
   ReactiveArray.prototype[m] = () ->
     rtn = Array.prototype[m].apply @_list, arguments
     @_syncIndexProxies()
     rtn
+
+_.each ['shift', 'splice', 'unshift'], (m) ->
+  ReactiveArray.prototype[m] = () ->
+    orgList = @_list.slice()
+    rtn = Array.prototype[m].apply @_list, arguments
+    @_syncIndexProxies()
+    dep.changed() for dep, i in @_listDeps when dep && orgList[i] != @_list[i]
+    rtn
+
 _.each ['reverse','sort'], (m) ->
   ReactiveArray.prototype[m] = () ->
     orgList = @_list.slice()

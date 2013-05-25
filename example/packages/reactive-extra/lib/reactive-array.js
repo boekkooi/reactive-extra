@@ -198,12 +198,30 @@
 
   })();
 
-  _.each(['pop', 'push', 'shift', 'splice', 'unshift'], function(m) {
+  _.each(['pop', 'push'], function(m) {
     return ReactiveArray.prototype[m] = function() {
       var rtn;
 
       rtn = Array.prototype[m].apply(this._list, arguments);
       this._syncIndexProxies();
+      return rtn;
+    };
+  });
+
+  _.each(['shift', 'splice', 'unshift'], function(m) {
+    return ReactiveArray.prototype[m] = function() {
+      var dep, i, orgList, rtn, _i, _len, _ref;
+
+      orgList = this._list.slice();
+      rtn = Array.prototype[m].apply(this._list, arguments);
+      this._syncIndexProxies();
+      _ref = this._listDeps;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        dep = _ref[i];
+        if (dep && orgList[i] !== this._list[i]) {
+          dep.changed();
+        }
+      }
       return rtn;
     };
   });

@@ -565,11 +565,20 @@ Uses <a href="http://underscorejs.org/#indexOf">_.lastIndexOf</a>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>_.each [<span class="string">'pop'</span>, <span class="string">'push'</span>, <span class="string">'shift'</span>, <span class="string">'splice'</span>, <span class="string">'unshift'</span>], (m) -&gt;
+            <div class="content"><div class='highlight'><pre>_.each [<span class="string">'pop'</span>, <span class="string">'push'</span>], (m) -&gt;
   ReactiveArray.prototype[m] = () -&gt;
     rtn = Array.prototype[m].apply <span class="property">@_list</span>, arguments
     <span class="property">@_syncIndexProxies</span>()
     rtn
+
+_.each [<span class="string">'shift'</span>, <span class="string">'splice'</span>, <span class="string">'unshift'</span>], (m) -&gt;
+  ReactiveArray.prototype[m] = () -&gt;
+    orgList = <span class="property">@_list</span>.slice()
+    rtn = Array.prototype[m].apply <span class="property">@_list</span>, arguments
+    <span class="property">@_syncIndexProxies</span>()
+    dep.changed() <span class="keyword">for</span> dep, i <span class="keyword">in</span> <span class="property">@_listDeps</span> <span class="keyword">when</span> dep &amp;&amp; orgList[i] != <span class="property">@_list</span>[i]
+    rtn
+
 _.each [<span class="string">'reverse'</span>,<span class="string">'sort'</span>], (m) -&gt;
   ReactiveArray.prototype[m] = () -&gt;
     orgList = <span class="property">@_list</span>.slice()

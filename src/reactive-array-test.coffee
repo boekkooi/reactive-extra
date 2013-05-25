@@ -133,6 +133,18 @@ Tinytest.add "ReactiveArray - Deps", (test) ->
   test.equal indexOfX, 5, 'sort changes all (not really but i\'m lazy)'
   test.equal lastIndexOfX, 6, 'sort changes all (not really but i\'m lazy)'
 
+  # shift
+  arr.unshift('drink')
+  Deps.flush()
+  test.equal lengthX, 6
+  test.equal bracketX, 4
+
+  # unshift
+  test.equal arr.shift(), 'drink'
+  Deps.flush()
+  test.equal lengthX, 7
+  test.equal bracketX, 5
+
 Tinytest.add "ReactiveArray - Sort/Reverse", (test) ->
   arr = new ReactiveArray 3, 2, 1
 
