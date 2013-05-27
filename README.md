@@ -60,7 +60,7 @@ arr.map(function(v) {
 // A work around is to use 'arr.length = 10' and then do 'arr[9] = "a"'
 ```
 
-## ReactiveArray
+## ReactiveList
 A reactive list implementation based on ReactiveArray. This implementation has a custom handlebars each helper extension.
 Checkout the [api docs](http://boekkooi.github.io/reactive-extra/reactive-list.html).
 
