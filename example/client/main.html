@@ -1,0 +1,21 @@
+<head>
+    <title>Reactive Extra Examples</title>
+</head>
+
+<body>
+    {{> list }}
+</body>
+
+<template name="list">
+    <ol>
+    {{#each list}}
+        <li>
+            <input type="text" value="{{this}}" readonly="readonly" />
+        </li>
+    {{/each}}
+    </ol>
+    <button id="list-reverse">Reverse</button>
+    <button id="list-add">Add</button>
+    <button id="list-remove">Remove</button>
+    <button id="list-sort">Sort</button>
+</template>

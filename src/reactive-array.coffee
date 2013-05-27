@@ -1,5 +1,4 @@
-# I wish i could use http://wiki.ecmascript.org/doku.php?id=harmony:proxies
-
+# ## *Reactive Array*
 class @ReactiveArray
   constructor: () ->
     # the actual array that we proxy to
@@ -37,6 +36,33 @@ class @ReactiveArray
     @_listLengthDep.depend()
     @_listValueDep.depend()
     return @_list.slice()
+
+  # ### *Mutator methods*
+  # ---------------------------------------
+  # Optimized mutator methods for reactivity
+  reverse: () ->
+    # Implement a custom array sort could be usefull based on http://jsperf.com/js-array-reverse-vs-while-loop/9
+    # but this works for small array's i still trust array.reverse a bit better
+    Array.prototype.reverse.apply @_list
+    `for (left = 0, right = this._list.length - 1; left < right; left += 1, right -= 1) {
+      if (left === right) { continue; }
+      if (this._listDeps[left]) { this._listDeps[left].changed(); }
+      if (this._listDeps[right]) { this._listDeps[right].changed(); }
+    }`
+    @_listValueDep.changed()
+    return @
+
+  # #### sort
+  # Sorts the elements of an array in place and returns the array.
+  sort: () ->
+    orgList = @_list.slice()
+    Array.prototype.sort.apply @_list, arguments
+
+    # Find the changed values and trigger there dependencies
+    for dep, i in @_listDeps when dep && orgList[i] != @_list[i]
+      dep.changed()
+    @_listValueDep.changed()
+    return @
 
   # ### *Accessor methods*
   # ---------------------------------------
@@ -129,7 +155,7 @@ class @ReactiveArray
   # #### clone
   # *[EJSON::clone](http://docs.meteor.com/#ejson_type_clone)*
   clone: () ->
-    ReactiveArray.wrap @_list
+    @constructor.wrap @_list
 
   # #### equals
   # *[EJSON::equals](http://docs.meteor.com/#ejson_type_equals)*
@@ -188,9 +214,10 @@ class @ReactiveArray
 
   # ### _indexSet
   _indexSet: (i, val) ->
-    @_list[i] = val
-    @_listDeps[i]?.changed()
-    @_listValueDep.changed()
+    if @_list[i] != val
+      @_list[i] = val
+      @_listDeps[i]?.changed()
+      @_listValueDep.changed()
     val
 
   # #### _definePrivateProperty
@@ -224,16 +251,6 @@ _.each ['shift', 'splice', 'unshift'], (m) ->
     dep.changed() for dep, i in @_listDeps when dep && orgList[i] != @_list[i]
     rtn
 
-_.each ['reverse','sort'], (m) ->
-  ReactiveArray.prototype[m] = () ->
-    orgList = @_list.slice()
-    Array.prototype[m].apply @_list, arguments
-
-    # Find the changed values and trigger there dependencies
-    dep.changed() for dep, i in @_listDeps when dep && orgList[i] != @_list[i]
-    @_listValueDep.changed()
-    return @
-
 # #### *Accessor methods*
 # Create Accessor proxy methods
 _.each ['concat','slice'], (m) ->
@@ -241,7 +258,7 @@ _.each ['concat','slice'], (m) ->
     rtn = Array.prototype[m].apply @_list, arguments
     @_listLengthDep.depend()
     @_listValueDep.depend()
-    ReactiveArray.wrap rtn
+    @constructor.wrap rtn
 
 _.each ['join','toString'], (m) ->
   ReactiveArray.prototype[m] = () ->
@@ -263,7 +280,7 @@ _.each ['filter', 'map'], (m) ->
     @_listLengthDep.depend()
     @_listValueDep.depend()
 
-    ReactiveArray.wrap rtn
+    @constructor.wrap rtn
 
 # Create iteration proxy methods for `reduce`, `reduceRight` that are using [underscore.js](http://underscorejs.org/)
 _.each ['reduce', 'reduceRight'], (m) ->

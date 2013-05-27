@@ -60,6 +60,10 @@ arr.map(function(v) {
 // A work around is to use 'arr.length = 10' and then do 'arr[9] = "a"'
 ```
 
+## ReactiveArray
+A reactive list implementation based on ReactiveArray. This implementation has a custom handlebars each helper extension.
+Checkout the [api docs](http://boekkooi.github.io/reactive-extra/reactive-list.html).
+
 ## Cake
 The current `cake` commands require the [wrench](https://github.com/ryanmcgrath/wrench-js) module, on windows the [which](https://github.com/isaacs/node-which) module is also required.
 
