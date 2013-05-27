@@ -19,6 +19,11 @@
           <div id="jump_page">
             
               
+              <a class="source" href="handlebars-list.html">
+                handlebars-list.coffee
+              </a>
+            
+              
               <a class="source" href="reactive-array-test.html">
                 reactive-array-test.coffee
               </a>
@@ -36,6 +41,16 @@
               
               <a class="source" href="reactive-dictionary.html">
                 reactive-dictionary.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-list-test.html">
+                reactive-list-test.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-list.html">
+                reactive-list.coffee
               </a>
             
               
@@ -433,7 +448,43 @@ Tinytest.add <span class="string">"ReactiveArray - Deps"</span>, (test) -&gt;
   test.equal bracketX, <span class="number">3</span>
   test.equal lengthX, <span class="number">5</span>
   test.equal indexOfX, <span class="number">5</span>, <span class="string">'sort changes all (not really but i\'m lazy)'</span>
-  test.equal lastIndexOfX, <span class="number">6</span>, <span class="string">'sort changes all (not really but i\'m lazy)'</span>
+  test.equal lastIndexOfX, <span class="number">6</span>, <span class="string">'sort changes all (not really but i\'m lazy)'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>shift</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  arr.unshift(<span class="string">'drink'</span>)
+  Deps.flush()
+  test.equal lengthX, <span class="number">6</span>
+  test.equal bracketX, <span class="number">4</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>unshift</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  test.equal arr.shift(), <span class="string">'drink'</span>
+  Deps.flush()
+  test.equal lengthX, <span class="number">7</span>
+  test.equal bracketX, <span class="number">5</span>
 
 Tinytest.add <span class="string">"ReactiveArray - Sort/Reverse"</span>, (test) -&gt;
   arr = <span class="keyword">new</span> ReactiveArray <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>

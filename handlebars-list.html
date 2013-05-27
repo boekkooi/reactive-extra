@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Handlebars each override</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="handlebars-list.html">
+                handlebars-list.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-array-test.html">
+                reactive-array-test.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-array.html">
+                reactive-array.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-dictionary-test.html">
+                reactive-dictionary-test.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-dictionary.html">
+                reactive-dictionary.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-list-test.html">
+                reactive-list-test.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-list.html">
+                reactive-list.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-object-test.html">
+                reactive-object-test.coffee
+              </a>
+            
+              
+              <a class="source" href="reactive-object.html">
+                reactive-object.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>Handlebars each override</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>HandlebarsEach = Handlebars._default_helpers.each
+Handlebars._default_helpers.<span class="function"><span class="title">each</span></span> = (arg, options) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Only use our implementation when the arg is a ReactiveList</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">return</span> HandlebarsEach.call(<span class="keyword">this</span>, arg, options) <span class="keyword">unless</span> arg <span class="keyword">and</span> arg <span class="keyword">instanceof</span> ReactiveList</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Item &amp; else functions (stolen from <a href="https://github.com/meteor/meteor/blob/master/packages/templating/deftemplate.js">templating/deftemplate.js</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="title">itemFunc</span></span> = (item) -&gt;
+    Spark.labelBranch (item &amp;&amp; item._id) || Spark.UNIQUE_LABEL, () -&gt;
+      Spark.setDataContext item, Spark.isolate(_.bind(options.fn, <span class="literal">null</span>, item))
+  elseFunc = () -&gt; <span class="keyword">if</span> options.inverse <span class="keyword">then</span> Spark.isolate(options.inverse) <span class="keyword">else</span> <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Call our curstom observe based SparkArrayList</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  SparkListObserve arg, itemFunc, elseFunc</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h1>Spark listObserve</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Spark._ANNOTATION_LIST_OBSERVE = <span class="string">"list_observe"</span>;
+Spark._ANNOTATION_LIST_OBSERVE_ITEM = <span class="string">"list_observe_item"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Render a object with a observe function using Spark
+<em>Most of this code is ripped from <a href="https://github.com/meteor/meteor/blob/master/packages/spark/spark.js#L899">Spark.list</a></em></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">SparkListObserve</span></span> = (observable, itemFunc, elseFunc) -&gt;
+  elseFunc = elseFunc || () -&gt; <span class="keyword">return</span> <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Create a level of indirection around our observable callbacks so we can change them later</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  callbacks = {}
+  observerCallbacks = {}
+  _.each [<span class="string">"addedAt"</span>, <span class="string">"changedAt"</span>, <span class="string">"removedAt"</span>, <span class="string">"movedTo"</span>], (name) -&gt;
+    observerCallbacks[name] = -&gt;
+      callbacks[name].apply <span class="literal">null</span>, arguments</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Create liverange stubs for the current contents of the observable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  itemArr = []
+  _.extend callbacks,
+    addedAt: (val, idx) -&gt;
+      itemArr[idx] = { liveRange: <span class="literal">null</span>, value: val }
+
+  handle = observable.observe observerCallbacks</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Get the renderer, if any</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  renderer = Spark._currentRenderer.get();
+  maybeAnnotate = <span class="keyword">if</span> renderer <span class="keyword">then</span> _.bind(renderer.annotate, renderer) <span class="keyword">else</span> (html) -&gt; html</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Render the initial contents.
+If we have a renderer, create a range around each item as well as around the list, and save them off for later.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  html = <span class="string">''</span>
+  outerRange = <span class="literal">null</span>
+  <span class="keyword">if</span> itemArr.length == <span class="number">0</span>
+    html = elseFunc()
+  <span class="keyword">else</span>
+    _.each itemArr, (elt) -&gt;
+      html += maybeAnnotate itemFunc(elt.value), Spark._ANNOTATION_LIST_OBSERVE_ITEM, (range) -&gt;
+        elt.liveRange = range
+        <span class="keyword">return</span>
+
+  stopped = <span class="literal">false</span>
+  cleanup = () -&gt;
+    handle.stop()
+    stopped = <span class="literal">true</span>
+
+  html = maybeAnnotate html, Spark._ANNOTATION_LIST_OBSERVE, (range) -&gt;
+    <span class="keyword">if</span> !range
+      cleanup()
+      <span class="keyword">return</span>
+    outerRange = range
+    outerRange.finalize = cleanup
+    <span class="keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>No renderer? Then we have no way to update the returned html and we can close the observer.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> !renderer
+    cleanup()
+    <span class="keyword">return</span> html
+
+  <span class="function"><span class="title">notifyParentsRendered</span></span> = -&gt;
+    walk = outerRange
+    walk.rendered.call walk.landmark  <span class="keyword">while</span> (walk = findParentOfType(Spark._ANNOTATION_LANDMARK, walk))
+    <span class="keyword">return</span>
+
+  <span class="function"><span class="title">later</span></span> = (func) -&gt;
+    Deps.afterFlush () -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Spark uses withEventGuard let&#39;s just have this won&#39;t brake</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      func() <span class="keyword">unless</span> stopped
+      <span class="keyword">return</span>
+    <span class="keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>The DOM update callbacks.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _.extend callbacks,
+    addedAt: (val, idx) -&gt;
+      later -&gt;
+        frag = Spark.render(_.bind(itemFunc, <span class="literal">null</span>, val))
+        DomUtils.wrapFragmentForContainer frag, outerRange.containerNode()
+        range = makeRange(Spark._ANNOTATION_LIST_ITEM, frag)
+        <span class="keyword">if</span> itemArr.length == <span class="number">0</span>
+          Spark.finalize outerRange.replaceContents(frag)
+        <span class="keyword">else</span>
+          itemArr[idx-<span class="number">1</span>].liveRange.insertAfter frag
+        itemArr[idx] = { liveRange: range, value: val }
+
+    removedAt: (val, idx) -&gt;
+      later -&gt;
+        <span class="keyword">if</span> itemArr.length == <span class="number">1</span>
+          frag = Spark.render(elseFunc)
+          DomUtils.wrapFragmentForContainer frag, outerRange.containerNode()
+          Spark.finalize outerRange.replaceContents(frag)
+        <span class="keyword">else</span>
+          Spark.finalize itemArr[idx].liveRange.extract()
+        itemArr.splice idx, <span class="number">1</span>
+        notifyParentsRendered()
+
+    movedTo: (val, fromIdx, toIdx) -&gt;
+      later -&gt;
+        elt = (itemArr.splice fromIdx, <span class="number">1</span>)[<span class="number">0</span>]
+        frag = elt.liveRange.extract()
+        <span class="keyword">if</span> toIdx <span class="keyword">of</span> itemArr
+          itemArr[toIdx].liveRange.insertBefore frag
+        <span class="keyword">else</span>
+          itemArr[toIdx-<span class="number">1</span>].liveRange.insertAfter frag
+        itemArr.splice toIdx, <span class="number">0</span>, elt
+        notifyParentsRendered()
+
+    changedAt: (val, idx) -&gt;
+      later -&gt;
+        elt = itemArr[idx]
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Unknown item at index: "</span> + idx)  <span class="keyword">unless</span> elt
+        elt.value = val
+        Spark.renderToRange elt.liveRange, _.bind(itemFunc, <span class="literal">null</span>, elt.value)
+
+  <span class="keyword">return</span> html</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2>findParentOfType</h2>
+<p>Ripped from <a href="https://github.com/meteor/meteor/blob/master/packages/spark/spark.js#L77">Spark.list</a>*</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">findParentOfType</span></span> = (type, range) -&gt;
+  <span class="keyword">loop</span>
+    range = range.findParent()
+    <span class="keyword">break</span> <span class="keyword">unless</span> range <span class="keyword">and</span> range.type <span class="keyword">isnt</span> type
+  range</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h2>makeRange</h2>
+<p>Ripped from <a href="https://github.com/meteor/meteor/blob/master/packages/spark/spark.js#L63">Spark.list</a>*</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">makeRange</span></span> = (type, start, end, inner) -&gt;
+  range = <span class="keyword">new</span> LiveRange(Spark._TAG, start, end, inner)
+  range.type = type
+  range</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
