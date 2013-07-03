@@ -23,7 +23,7 @@ path = require 'path'
 try wrench = require 'wrench' catch err
 try which = require('which').sync catch err
 
-if !wrench || !which
+if !wrench || !which && process.platform.match(/^win/)?
   console.log red + 'WARNING: Missing one of the following modules:'
   console.log '* wrench (npm install wrench)' if !wrench
   console.log '* which (npm install which)' if !which && process.platform.match(/^win/)?

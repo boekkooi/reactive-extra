@@ -36,8 +36,8 @@ class @ReactiveObject
     Object.defineProperty @, name,
       configurable: true
       enumerable: true
-      get: @_propertyGet.bind(@, name)
-      set: @_propertySet.bind(@, name)
+      get: _.bind @_propertyGet, @, name
+      set: _.bind @_propertySet, @, name
     @[name] = value
     return @
 

@@ -23,8 +23,8 @@
       Object.defineProperty(this, name, {
         configurable: true,
         enumerable: true,
-        get: this._propertyGet.bind(this, name),
-        set: this._propertySet.bind(this, name)
+        get: _.bind(this._propertyGet, this, name),
+        set: _.bind(this._propertySet, this, name)
       });
       this[name] = value;
       return this;

@@ -13,17 +13,16 @@ class @ReactiveArray
     @_definePrivateProperty '_listPropertyLengh', 0
 
     # Define the length property proxy
-    self = @
     Object.defineProperty @, 'length',
       configurable: false
       enumerable: false
       get: () ->
         @_listLengthDep.depend()
-        self._list.length
+        @_list.length
       set: (length) ->
-        self._list.length = length
-        self._syncIndexProxies()
-        return self._list.length
+        @_list.length = length
+        @_syncIndexProxies()
+        return @_list.length
 
     # Assign arguments
     if arguments.length > 0
@@ -203,8 +202,8 @@ class @ReactiveArray
     Object.defineProperty @, i,
       configurable: true
       enumerable: true
-      set: @_indexSet.bind(@, i)
-      get: @_indexGet.bind(@, i)
+      set: _.bind @_indexSet, @, i
+      get: _.bind @_indexGet, @, i
 
   # ### _indexGet
   _indexGet: (i) ->

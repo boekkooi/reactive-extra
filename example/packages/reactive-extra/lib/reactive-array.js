@@ -2,25 +2,22 @@
 (function() {
   this.ReactiveArray = (function() {
     function ReactiveArray() {
-      var self;
-
       this._definePrivateProperty('_list', []);
       this._definePrivateProperty('_listDeps', []);
       this._definePrivateProperty('_listLengthDep', new Deps.Dependency());
       this._definePrivateProperty('_listValueDep', new Deps.Dependency());
       this._definePrivateProperty('_listPropertyLengh', 0);
-      self = this;
       Object.defineProperty(this, 'length', {
         configurable: false,
         enumerable: false,
         get: function() {
           this._listLengthDep.depend();
-          return self._list.length;
+          return this._list.length;
         },
         set: function(length) {
-          self._list.length = length;
-          self._syncIndexProxies();
-          return self._list.length;
+          this._list.length = length;
+          this._syncIndexProxies();
+          return this._list.length;
         }
       });
       if (arguments.length > 0) {
@@ -186,8 +183,8 @@
       return Object.defineProperty(this, i, {
         configurable: true,
         enumerable: true,
-        set: this._indexSet.bind(this, i),
-        get: this._indexGet.bind(this, i)
+        set: _.bind(this._indexSet, this, i),
+        get: _.bind(this._indexGet, this, i)
       });
     };
 
