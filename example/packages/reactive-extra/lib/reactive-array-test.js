@@ -269,4 +269,25 @@
     test.isFalse(arr.equals(dolly), 'Obj was changed this should not effect a clone');
   });
 
+  Tinytest.add("ReactiveArray - issue 2", function(test) {
+    var arr, i;
+
+    arr = new ReactiveArray;
+    i = 0;
+    Deps.autorun(function() {
+      i++;
+      if (i > 1) {
+        return;
+      }
+      return arr.push('val');
+    });
+    arr.push('val');
+    Deps.flush();
+    if (i !== 1) {
+      return test.fail({
+        message: 'This should only be called once'
+      });
+    }
+  });
+
 }).call(this);

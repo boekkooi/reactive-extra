@@ -282,3 +282,19 @@ Tinytest.add "ReactiveArray - EJSON", (test) ->
   test.isFalse arr.equals(dolly), 'Obj was changed this should not effect a clone'
   return
 
+
+Tinytest.add "ReactiveArray - issue 2", (test) ->
+  arr = new ReactiveArray
+  i = 0
+  Deps.autorun () ->
+    i++
+    if i > 1
+      return
+    arr.push 'val'
+
+  arr.push 'val'
+  Deps.flush()
+
+  if i != 1
+    test.fail {message: 'This should only be called once'}
+

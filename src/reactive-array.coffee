@@ -182,16 +182,17 @@ class @ReactiveArray
   #
   # **suppress** boolean that indicates that changed should not be called
   _syncIndexProxies: (suppress) ->
-    if @length > @_listPropertyLengh
-      @_defineIndexProperty i for i in [@_listPropertyLengh...@length] by 1
-    else if @_listPropertyLengh > @length
-      for i in [@length...@_listPropertyLengh] by 1
+    length = @_list.length;
+    if length > @_listPropertyLengh
+      @_defineIndexProperty i for i in [@_listPropertyLengh...length] by 1
+    else if @_listPropertyLengh > length
+      for i in [length...@_listPropertyLengh] by 1
         dep = @_listDeps[i]
         delete @[i]
         delete @_list[i]
         delete @_listDeps[i]
         dep.changed() if dep
-    if !suppress && @_listPropertyLengh != @_list.length
+    if !suppress && @_listPropertyLengh != length
       @_listLengthDep.changed()
       @_listValueDep.changed()
 
