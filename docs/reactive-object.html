@@ -154,8 +154,8 @@ obj.undefineProperty(&#39;myProp&#39;);</code></pre>
     Object.defineProperty @, name,
       configurable: <span class="literal">true</span>
       enumerable: <span class="literal">true</span>
-      get: <span class="property">@_propertyGet</span>.bind(@, name)
-      set: <span class="property">@_propertySet</span>.bind(@, name)
+      get: _.bind <span class="property">@_propertyGet</span>, @, name
+      set: _.bind <span class="property">@_propertySet</span>, @, name
     @[name] = value
     <span class="keyword">return</span> @</pre></div></div>
             

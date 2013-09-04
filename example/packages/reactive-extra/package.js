@@ -6,7 +6,7 @@ var path = Npm.require("path");
 Package.on_use(function(api) {
   // Required packages
   api.use(["deps", "ejson", "underscore"], ["client", "server"]);
-  api.use(["templating"], ["client"]);
+  api.use(["templating", "handlebars"], ["client"]);
 
   // Server and client side code
   api.add_files([

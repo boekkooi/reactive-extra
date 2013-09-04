@@ -178,17 +178,16 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    self = @
-    Object.defineProperty @, <span class="string">'length'</span>,
+            <div class="content"><div class='highlight'><pre>    Object.defineProperty @, <span class="string">'length'</span>,
       configurable: <span class="literal">false</span>
       enumerable: <span class="literal">false</span>
       get: () -&gt;
         <span class="property">@_listLengthDep</span>.depend()
-        self._list.length
+        <span class="property">@_list</span>.length
       set: (length) -&gt;
-        self._list.length = length
-        self._syncIndexProxies()
-        <span class="keyword">return</span> self._list.length</pre></div></div>
+        <span class="property">@_list</span>.length = length
+        <span class="property">@_syncIndexProxies</span>()
+        <span class="keyword">return</span> <span class="property">@_list</span>.length</pre></div></div>
             
         </li>
         
@@ -532,16 +531,17 @@ Uses <a href="http://underscorejs.org/#indexOf">_.lastIndexOf</a>.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  _syncIndexProxies: (suppress) -&gt;
-    <span class="keyword">if</span> <span class="property">@length</span> &gt; <span class="property">@_listPropertyLengh</span>
-      <span class="property">@_defineIndexProperty</span> i <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="property">@_listPropertyLengh</span>...<span class="property">@length</span>] <span class="keyword">by</span> <span class="number">1</span>
-    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_listPropertyLengh</span> &gt; <span class="property">@length</span>
-      <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="property">@length</span>...<span class="property">@_listPropertyLengh</span>] <span class="keyword">by</span> <span class="number">1</span>
+    length = <span class="property">@_list</span>.length;
+    <span class="keyword">if</span> length &gt; <span class="property">@_listPropertyLengh</span>
+      <span class="property">@_defineIndexProperty</span> i <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="property">@_listPropertyLengh</span>...length] <span class="keyword">by</span> <span class="number">1</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_listPropertyLengh</span> &gt; length
+      <span class="keyword">for</span> i <span class="keyword">in</span> [length...<span class="property">@_listPropertyLengh</span>] <span class="keyword">by</span> <span class="number">1</span>
         dep = <span class="property">@_listDeps</span>[i]
         <span class="keyword">delete</span> @[i]
         <span class="keyword">delete</span> <span class="property">@_list</span>[i]
         <span class="keyword">delete</span> <span class="property">@_listDeps</span>[i]
         dep.changed() <span class="keyword">if</span> dep
-    <span class="keyword">if</span> !suppress &amp;&amp; <span class="property">@_listPropertyLengh</span> != <span class="property">@_list</span>.length
+    <span class="keyword">if</span> !suppress &amp;&amp; <span class="property">@_listPropertyLengh</span> != length
       <span class="property">@_listLengthDep</span>.changed()
       <span class="property">@_listValueDep</span>.changed()
 
@@ -564,8 +564,8 @@ Uses <a href="http://underscorejs.org/#indexOf">_.lastIndexOf</a>.</p>
     Object.defineProperty @, i,
       configurable: <span class="literal">true</span>
       enumerable: <span class="literal">true</span>
-      set: <span class="property">@_indexSet</span>.bind(@, i)
-      get: <span class="property">@_indexGet</span>.bind(@, i)</pre></div></div>
+      set: _.bind <span class="property">@_indexSet</span>, @, i
+      get: _.bind <span class="property">@_indexGet</span>, @, i</pre></div></div>
             
         </li>
         

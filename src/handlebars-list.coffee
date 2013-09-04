@@ -136,7 +136,7 @@ findParentOfType = (type, range) ->
   range
 
 # ## makeRange
-# Ripped from [Spark.list](https://github.com/meteor/meteor/blob/master/packages/spark/spark.js#L63)*
+# Ripped from [Spark.list](https://github.com/meteor/meteor/blob/master/packages/spark/spark.js#L81)*
 makeRange = (type, start, end, inner) ->
   range = new LiveRange(Spark._TAG, start, end, inner)
   range.type = type
