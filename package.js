@@ -6,7 +6,7 @@ var path = Npm.require("path");
 Package.on_use(function(api) {
   // Required packages
   api.use(["deps", "ejson", "underscore"], ["client", "server"]);
-  api.use(["templating", "handlebars"], ["client"]);
+  api.use(["ui", "handlebars"], ["client"]);
 
   // Server and client side code
   api.add_files([
@@ -17,8 +17,9 @@ Package.on_use(function(api) {
   ], ["client", "server"]);
 
   // Client side code
+  api.use('minimongo', ["client"]); // for idStringify
   api.add_files([
-    path.join("lib","handlebars-list.js")
+    path.join("lib","observe-sequence.js")
   ], ["client"]);
 });
 

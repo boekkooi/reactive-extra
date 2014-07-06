@@ -156,7 +156,7 @@ class @ReactiveList extends ReactiveArray
       currentPosition++
 
     for move in moves
-      this._trigger 'movedTo', @_list[move.to], move.from, move.to
+      @._trigger 'movedTo', @_list[move.to], move.from, move.to
 
     return @
 
